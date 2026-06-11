@@ -233,7 +233,7 @@ class _AllCategoriesButton extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isAll
                     ? Colors.white.withOpacity(0.2)
-                    : (isDark ? Colors.white10 : Colors.black06),
+                    : (isDark ? Colors.white10 : Colors.black.withOpacity(0.06)),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
@@ -326,7 +326,7 @@ class _CategoryTile extends StatelessWidget {
               : (isDark ? const Color(0xFF1E1E2E) : Colors.white),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? catColor.withOpacity(0.6) : (isDark ? Colors.white12 : Colors.black08),
+            color: isSelected ? catColor.withOpacity(0.6) : (isDark ? Colors.white12 : Colors.black.withOpacity(0.08)),
             width: isSelected ? 1.5 : 1,
           ),
         ),
@@ -355,7 +355,7 @@ class _CategoryTile extends StatelessWidget {
                     style: TextStyle(
                       color: isSelected
                           ? catColor
-                          : (isDark ? Colors.white87 : Colors.black87),
+                          : (isDark ? Colors.white.withOpacity(0.87) : Colors.black87),
                       fontWeight: FontWeight.w600,
                       fontSize: 13,
                     ),
@@ -412,7 +412,7 @@ class _MapModeToggle extends StatelessWidget {
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E1E2E) : Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: isDark ? Colors.white12 : Colors.black08),
+        border: Border.all(color: isDark ? Colors.white12 : Colors.black.withOpacity(0.08)),
       ),
       child: Row(
         children: [
@@ -530,7 +530,7 @@ class _LanguageSelector extends StatelessWidget {
                   border: Border.all(
                     color: isActive
                         ? const Color(0xFF1A5F7A)
-                        : (isDark ? Colors.white12 : Colors.black08),
+                        : (isDark ? Colors.white12 : Colors.black.withOpacity(0.08)),
                   ),
                 ),
                 child: Column(
@@ -577,7 +577,7 @@ class _DarkModeToggle extends StatelessWidget {
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E1E2E) : Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: isDark ? Colors.white12 : Colors.black08),
+        border: Border.all(color: isDark ? Colors.white12 : Colors.black.withOpacity(0.08)),
       ),
       child: Row(
         children: [
