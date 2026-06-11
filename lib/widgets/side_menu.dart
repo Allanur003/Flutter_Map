@@ -303,8 +303,6 @@ class _CategoryTile extends StatelessWidget {
         return loc.roundabouts;
       case LocationCategory.underpass:
         return loc.underpasses;
-      case LocationCategory.water:
-        return loc.water;
     }
   }
 
