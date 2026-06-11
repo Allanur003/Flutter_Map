@@ -6,7 +6,6 @@ enum LocationCategory {
   tunnel,
   roundabout,
   underpass,
-  water,
 }
 
 extension LocationCategoryExtension on LocationCategory {
@@ -35,8 +34,6 @@ extension LocationCategoryExtension on LocationCategory {
         return '🔄';
       case LocationCategory.underpass:
         return '🌉';
-      case LocationCategory.water:
-        return '💧';
     }
   }
 
@@ -50,8 +47,6 @@ extension LocationCategoryExtension on LocationCategory {
         return Icons.circle_outlined;
       case LocationCategory.underpass:
         return Icons.swap_vert;
-      case LocationCategory.water:
-        return Icons.water;
     }
   }
 }
@@ -323,55 +318,6 @@ class AshgabatData {
     ),
 
     // ---- WATER (Suw) ----
-    MapLocation(
-      id: 'wt_01',
-      position: LatLng(37.9480, 58.3280),
-      category: LocationCategory.water,
-      names: {
-        'tk': 'Aşgabat suw howuzy',
-        'ru': 'Ашхабадское водохранилище',
-        'en': 'Ashgabat Reservoir',
-      },
-    ),
-    MapLocation(
-      id: 'wt_02',
-      position: LatLng(37.9570, 58.4200),
-      category: LocationCategory.water,
-      names: {
-        'tk': 'Köpetdag kanalы',
-        'ru': 'Канал Копетдаг',
-        'en': 'Kopetdag Canal',
-      },
-    ),
-    MapLocation(
-      id: 'wt_03',
-      position: LatLng(37.9710, 58.3450),
-      category: LocationCategory.water,
-      names: {
-        'tk': 'Berzengi çeşmesi',
-        'ru': 'Источник Берзенги',
-        'en': 'Berzengi Spring',
-      },
-    ),
-    MapLocation(
-      id: 'wt_04',
-      position: LatLng(37.9550, 58.3970),
-      category: LocationCategory.water,
-      names: {
-        'tk': 'Şäher howuzy',
-        'ru': 'Городской бассейн',
-        'en': 'City Pool',
-      },
-    ),
-    MapLocation(
-      id: 'wt_05',
-      position: LatLng(37.9430, 58.4100),
-      category: LocationCategory.water,
-      names: {
-        'tk': 'Gündogar kanal',
-        'ru': 'Восточный канал',
-        'en': 'Eastern Canal',
-      },
-    ),
+
   ];
 }
