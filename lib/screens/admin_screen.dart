@@ -50,15 +50,12 @@ class _AdminScreenState extends State<AdminScreen> {
       },
     );
 
-    // Veriyi ekle
-    AshgabatData.locations.add(newLocation);
-
-      AshgabatData.saveToStorage();
+    setState(() {
+      AshgabatData.locations.add(newLocation);
+    });
     
-    // Provider'ı güncelle (haritayı yenile)
+    AshgabatData.save();
     context.read<AppProvider>().notifyListeners();
-
-    // Formu temizle
     _clearForm();
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -70,7 +67,8 @@ class _AdminScreenState extends State<AdminScreen> {
     setState(() {
       AshgabatData.locations.removeWhere((loc) => loc.id == id);
     });
-      AshgabatData.saveToStorage();
+    
+    AshgabatData.save();
     context.read<AppProvider>().notifyListeners();
   }
 
@@ -99,7 +97,6 @@ class _AdminScreenState extends State<AdminScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // === EKLEME FORMU ===
             Text(
               'Yeni Lokasyon Ekle',
               style: TextStyle(
@@ -114,7 +111,6 @@ class _AdminScreenState extends State<AdminScreen> {
               key: _formKey,
               child: Column(
                 children: [
-                  // ID
                   _TextField(
                     controller: _idController,
                     label: 'ID (örn: tl_08)',
@@ -122,7 +118,6 @@ class _AdminScreenState extends State<AdminScreen> {
                   ),
                   const SizedBox(height: 8),
                   
-                  // Kategori seçimi
                   DropdownButtonFormField<LocationCategory>(
                     value: _selectedCategory,
                     decoration: InputDecoration(
@@ -139,7 +134,6 @@ class _AdminScreenState extends State<AdminScreen> {
                   ),
                   const SizedBox(height: 8),
                   
-                  // İsimler
                   _TextField(
                     controller: _tkNameController,
                     label: 'Türkmençe İsim',
@@ -157,7 +151,6 @@ class _AdminScreenState extends State<AdminScreen> {
                   ),
                   const SizedBox(height: 8),
                   
-                  // Koordinatlar
                   Row(
                     children: [
                       Expanded(
@@ -181,7 +174,6 @@ class _AdminScreenState extends State<AdminScreen> {
                   ),
                   const SizedBox(height: 16),
                   
-                  // Ekle butonu
                   SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -203,7 +195,6 @@ class _AdminScreenState extends State<AdminScreen> {
             const Divider(),
             const SizedBox(height: 16),
             
-            // === MEVCUT LİSTE ===
             Text(
               'Mevcut Lokasyonlar (${AshgabatData.locations.length})',
               style: TextStyle(
@@ -234,8 +225,6 @@ class _AdminScreenState extends State<AdminScreen> {
     }
   }
 }
-
-// === YARDIMCI WIDGETLAR ===
 
 class _TextField extends StatelessWidget {
   final TextEditingController controller;
