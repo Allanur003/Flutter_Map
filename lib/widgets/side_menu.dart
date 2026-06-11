@@ -71,6 +71,49 @@ class SideMenu extends StatelessWidget {
                         _SectionLabel(text: loc.darkMode, isDark: isDark),
                         const SizedBox(height: 8),
                         _DarkModeToggle(provider: provider, loc: loc, isDark: isDark),
+                        const SizedBox(height: 16),
+                        _Divider(isDark: isDark),
+                        const SizedBox(height: 16),
+                        GestureDetector(
+                          onTap: () {
+                            onClose();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => const AdminScreen()),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF1A5F7A),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 32,
+                                  height: 32,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: const Icon(Icons.admin_panel_settings, color: Colors.white, size: 18),
+                                ),
+                                const SizedBox(width: 12),
+                                const Text(
+                                  'Admin Panel',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                const Spacer(),
+                                const Icon(Icons.arrow_forward_ios, color: Colors.white70, size: 14),
+                              ],
+                            ),
+                          ),
+                        ),
                         const SizedBox(height: 32),
                       ],
                     ),
@@ -85,7 +128,6 @@ class SideMenu extends StatelessWidget {
   }
 }
 
-// ── Header ────────────────────────────────────────────────────────────────────
 class _MenuHeader extends StatelessWidget {
   final AppLocalizations loc;
   final bool isDark;
@@ -151,7 +193,6 @@ class _MenuHeader extends StatelessWidget {
   }
 }
 
-// ── Section Label ──────────────────────────────────────────────────────────────
 class _SectionLabel extends StatelessWidget {
   final String text;
   final bool isDark;
@@ -172,7 +213,6 @@ class _SectionLabel extends StatelessWidget {
   }
 }
 
-// ── Divider ────────────────────────────────────────────────────────────────────
 class _Divider extends StatelessWidget {
   final bool isDark;
   const _Divider({required this.isDark});
@@ -186,7 +226,6 @@ class _Divider extends StatelessWidget {
   }
 }
 
-// ── All Categories Button ──────────────────────────────────────────────────────
 class _AllCategoriesButton extends StatelessWidget {
   final AppProvider provider;
   final AppLocalizations loc;
@@ -278,7 +317,6 @@ class _AllCategoriesButton extends StatelessWidget {
   }
 }
 
-// ── Category Tile ──────────────────────────────────────────────────────────────
 class _CategoryTile extends StatelessWidget {
   final LocationCategory category;
   final bool isSelected;
@@ -392,7 +430,6 @@ class _CategoryTile extends StatelessWidget {
   }
 }
 
-// ── Map Mode Toggle ────────────────────────────────────────────────────────────
 class _MapModeToggle extends StatelessWidget {
   final AppProvider provider;
   final AppLocalizations loc;
@@ -491,7 +528,6 @@ class _MapModeBtn extends StatelessWidget {
   }
 }
 
-// ── Language Selector ──────────────────────────────────────────────────────────
 class _LanguageSelector extends StatelessWidget {
   final AppProvider provider;
   final AppLocalizations loc;
@@ -557,7 +593,6 @@ class _LanguageSelector extends StatelessWidget {
   }
 }
 
-// ── Dark Mode Toggle ───────────────────────────────────────────────────────────
 class _DarkModeToggle extends StatelessWidget {
   final AppProvider provider;
   final AppLocalizations loc;
@@ -656,51 +691,3 @@ class _DarkModeBtn extends StatelessWidget {
     );
   }
 }
-
-
-const SizedBox(height: 16),
-_Divider(isDark: isDark),
-const SizedBox(height: 16),
-
-// Admin butonu
-GestureDetector(
-  onTap: () {
-    onClose(); // Menüyü kapat
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const AdminScreen()),
-    );
-  },
-  child: Container(
-    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-    decoration: BoxDecoration(
-      color: const Color(0xFF1A5F7A),
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Row(
-      children: [
-        Container(
-          width: 32,
-          height: 32,
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: const Icon(Icons.admin_panel_settings, color: Colors.white, size: 18),
-        ),
-        const SizedBox(width: 12),
-        const Text(
-          'Admin Panel',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
-          ),
-        ),
-        const Spacer(),
-        const Icon(Icons.arrow_forward_ios, color: Colors.white70, size: 14),
-      ],
-    ),
-  ),
-),
-const SizedBox(height: 32),
