@@ -19,7 +19,7 @@ class AppLocalizations {
       'trafficLights': 'Swetaforlar',
       'tunnels': 'Tuneller',
       'roundabouts': 'Kruglar',
-      'underpasses': 'Päddemkalar',
+      'underpasses': 'Paddemkalar',
       'selectAll': 'Ählisini saýla',
       'deselectAll': 'Hiçisini saýlama',
       'mapMode': 'Karta görnüşi',
