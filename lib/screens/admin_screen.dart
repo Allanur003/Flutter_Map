@@ -52,6 +52,8 @@ class _AdminScreenState extends State<AdminScreen> {
 
     // Veriyi ekle
     AshgabatData.locations.add(newLocation);
+
+      AshgabatData.saveToStorage();
     
     // Provider'ı güncelle (haritayı yenile)
     context.read<AppProvider>().notifyListeners();
@@ -68,6 +70,7 @@ class _AdminScreenState extends State<AdminScreen> {
     setState(() {
       AshgabatData.locations.removeWhere((loc) => loc.id == id);
     });
+      AshgabatData.saveToStorage();
     context.read<AppProvider>().notifyListeners();
   }
 
