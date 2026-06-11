@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
 import '../models/map_location.dart';
 import '../l10n/app_localizations.dart';
+import '../screens/admin_screen.dart';
 
 class SideMenu extends StatelessWidget {
   final VoidCallback onClose;
@@ -655,3 +656,51 @@ class _DarkModeBtn extends StatelessWidget {
     );
   }
 }
+
+
+const SizedBox(height: 16),
+_Divider(isDark: isDark),
+const SizedBox(height: 16),
+
+// Admin butonu
+GestureDetector(
+  onTap: () {
+    onClose(); // Menüyü kapat
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const AdminScreen()),
+    );
+  },
+  child: Container(
+    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+    decoration: BoxDecoration(
+      color: const Color(0xFF1A5F7A),
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Row(
+      children: [
+        Container(
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: const Icon(Icons.admin_panel_settings, color: Colors.white, size: 18),
+        ),
+        const SizedBox(width: 12),
+        const Text(
+          'Admin Panel',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+          ),
+        ),
+        const Spacer(),
+        const Icon(Icons.arrow_forward_ios, color: Colors.white70, size: 14),
+      ],
+    ),
+  ),
+),
+const SizedBox(height: 32),
