@@ -9,6 +9,7 @@ import 'l10n/app_localizations.dart';
 import 'models/map_location.dart'; 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+   await AshgabatData.load();
     await AshgabatData.loadFromStorage();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
