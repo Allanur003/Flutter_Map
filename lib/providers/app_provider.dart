@@ -25,20 +25,17 @@ class AppProvider extends ChangeNotifier {
     _isDarkMode = prefs.getBool('darkMode') ?? false;
     _languageCode = prefs.getString('language') ?? 'tk';
     _isSatelliteMode = prefs.getBool('satellite') ?? false;
-final saved = prefs.getStringList('categories');
-  if (saved != null && saved.isNotEmpty) {
-    _selectedCategories = saved
-        .map((s) => LocationCategory.values.firstWhere(
-              (e) => e.name == s,
-              orElse: () => LocationCategory.trafficLight,
-            ))
-        .toSet();
-  } else {
-     _selectedCategories = {};
+    final saved = prefs.getStringList('categories');
+    if (saved != null && saved.isNotEmpty) {
+      _selectedCategories = saved
+          .map((s) => LocationCategory.values.firstWhere(
+                (e) => e.name == s,
+                orElse: () => LocationCategory.trafficLight,
+              ))
+          .toSet();
+    }
+    notifyListeners();
   }
-  
-  notifyListeners();
-}
 
   Future<void> toggleDarkMode() async {
     _isDarkMode = !_isDarkMode;
@@ -105,8 +102,4 @@ final saved = prefs.getStringList('categories');
         .where((loc) => _selectedCategories.contains(loc.category))
         .toList();
   }
-}
-
-void refresh() {
-  notifyListeners();
 }
