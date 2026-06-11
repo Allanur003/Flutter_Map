@@ -122,7 +122,7 @@ class LocationInfoCard extends StatelessWidget {
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: isDark ? Colors.white10 : Colors.black06,
+                 color: isDark ? Colors.white10 : Colors.black.withOpacity(0.06),
                   borderRadius: BorderRadius.circular(9),
                 ),
                 child: Icon(
