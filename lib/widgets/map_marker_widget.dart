@@ -54,7 +54,6 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget>
           return Stack(
             alignment: Alignment.center,
             children: [
-              // Pulse ring when selected
               if (isSelected)
                 Container(
                   width: 52,
@@ -68,8 +67,6 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget>
                     ),
                   ),
                 ),
-
-              // Main marker
               AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
                 width: isSelected ? 42 : 34,
