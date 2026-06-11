@@ -88,36 +88,36 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                 if (provider.isMenuOpen) _closeMenu(provider);
               },
             ),
-            children: [
-              // Tile layer
-              TileLayer(
-                urlTemplate: provider.isSatelliteMode
-                    ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-                    : isDark
-                        ? 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png'
-                        : 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
-                subdomains: provider.isSatelliteMode ? const [] : const ['a', 'b', 'c', 'd'],
-                maxZoom: 19,
-                userAgentPackageName: 'com.example.ashgabat_map',
-              ),
+children: [
+  // Tile layer - CartoDB (gündüz/gece) / ArcGIS (uydu)
+  TileLayer(
+    urlTemplate: provider.isSatelliteMode
+        ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+        : isDark
+            ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
+            : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+    subdomains: const ['a', 'b', 'c', 'd'],
+    maxZoom: 19,
+    userAgentPackageName: 'com.example.ashgabat_map',
+  ),
 
-              // Markers
-              MarkerLayer(
-                markers: provider.filteredLocations.map((location) {
-                  final isSelected = _selectedLocation?.id == location.id;
-                  return Marker(
-                    point: location.position,
-                    width: isSelected ? 52 : 40,
-                    height: isSelected ? 52 : 40,
-                    child: MapMarkerWidget(
-                      location: location,
-                      isSelected: isSelected,
-                      onTap: () => _onMarkerTapped(location),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ],
+  // Markers
+  MarkerLayer(
+    markers: provider.filteredLocations.map((location) {
+      final isSelected = _selectedLocation?.id == location.id;
+      return Marker(
+        point: location.position,
+        width: isSelected ? 52 : 40,
+        height: isSelected ? 52 : 40,
+        child: MapMarkerWidget(
+          location: location,
+          isSelected: isSelected,
+          onTap: () => _onMarkerTapped(location),
+        ),
+      );
+    }).toList(),
+  ),
+],
           ),
 
           // ─── OVERLAY TINT when menu open ─────────────────────
