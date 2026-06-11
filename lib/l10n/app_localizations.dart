@@ -19,8 +19,7 @@ class AppLocalizations {
       'trafficLights': 'Swetaforlar',
       'tunnels': 'Tuneller',
       'roundabouts': 'Kruglar',
-      'underpasses': 'Päddemkalar',
-      'water': 'Suw',
+      'underpasses': 'Paddemkalar',
       'selectAll': 'Ählisini saýla',
       'deselectAll': 'Hiçisini saýlama',
       'mapMode': 'Karta görnüşi',
@@ -46,7 +45,6 @@ class AppLocalizations {
       'tunnels': 'Туннели',
       'roundabouts': 'Круги',
       'underpasses': 'Подземные переходы',
-      'water': 'Вода',
       'selectAll': 'Выбрать все',
       'deselectAll': 'Снять выбор',
       'mapMode': 'Режим карты',
@@ -72,7 +70,6 @@ class AppLocalizations {
       'tunnels': 'Tunnels',
       'roundabouts': 'Roundabouts',
       'underpasses': 'Underpasses',
-      'water': 'Water',
       'selectAll': 'Select All',
       'deselectAll': 'Deselect All',
       'mapMode': 'Map Mode',
@@ -106,7 +103,6 @@ class AppLocalizations {
   String get tunnels => translate('tunnels');
   String get roundabouts => translate('roundabouts');
   String get underpasses => translate('underpasses');
-  String get water => translate('water');
   String get selectAll => translate('selectAll');
   String get deselectAll => translate('deselectAll');
   String get mapMode => translate('mapMode');
