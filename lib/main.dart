@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -5,9 +6,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'providers/app_provider.dart';
 import 'screens/map_screen.dart';
 import 'l10n/app_localizations.dart';
-
+import 'models/map_location.dart'; 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+    await AshgabatData.loadFromStorage();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.landscapeLeft,
