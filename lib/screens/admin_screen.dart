@@ -59,7 +59,7 @@ class _AdminScreenState extends State<AdminScreen> {
     _clearForm();
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Lokasyon eklendi!')),
+      const SnackBar(content: Text('Lokasiya goshuldy!')),
     );
   }
 
@@ -98,7 +98,7 @@ class _AdminScreenState extends State<AdminScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Yeni Lokasyon Ekle',
+              'Taze Lokasiya gosh',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -113,15 +113,15 @@ class _AdminScreenState extends State<AdminScreen> {
                 children: [
                   _TextField(
                     controller: _idController,
-                    label: 'ID (örn: tl_08)',
-                    validator: (v) => v?.isEmpty ?? true ? 'Zorunlu' : null,
+                    label: 'ID (mslm: tl_08)',
+                    validator: (v) => v?.isEmpty ?? true ? 'Hokman' : null,
                   ),
                   const SizedBox(height: 8),
                   
                   DropdownButtonFormField<LocationCategory>(
                     value: _selectedCategory,
                     decoration: InputDecoration(
-                      labelText: 'Kategori',
+                      labelText: 'Kategoriya',
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                     ),
                     items: LocationCategory.values.map((cat) {
@@ -136,18 +136,18 @@ class _AdminScreenState extends State<AdminScreen> {
                   
                   _TextField(
                     controller: _tkNameController,
-                    label: 'Türkmençe İsim',
-                    validator: (v) => v?.isEmpty ?? true ? 'Zorunlu' : null,
+                    label: 'Türkmençe ady',
+                    validator: (v) => v?.isEmpty ?? true ? 'Hokman' : null,
                   ),
                   const SizedBox(height: 8),
                   _TextField(
                     controller: _ruNameController,
-                    label: 'Rusça İsim',
+                    label: 'Rusça ady',
                   ),
                   const SizedBox(height: 8),
                   _TextField(
                     controller: _enNameController,
-                    label: 'İngilizce İsim',
+                    label: 'İnlisce ady',
                   ),
                   const SizedBox(height: 8),
                   
@@ -156,18 +156,18 @@ class _AdminScreenState extends State<AdminScreen> {
                       Expanded(
                         child: _TextField(
                           controller: _latController,
-                          label: 'Enlem (Lat)',
+                          label: 'Latitute',
                           keyboardType: TextInputType.number,
-                          validator: (v) => v?.isEmpty ?? true ? 'Zorunlu' : null,
+                          validator: (v) => v?.isEmpty ?? true ? 'Hokman' : null,
                         ),
                       ),
                       const SizedBox(width: 8),
                       Expanded(
                         child: _TextField(
                           controller: _lngController,
-                          label: 'Boylam (Lng)',
+                          label: 'Longitude',
                           keyboardType: TextInputType.number,
-                          validator: (v) => v?.isEmpty ?? true ? 'Zorunlu' : null,
+                          validator: (v) => v?.isEmpty ?? true ? 'Hokman' : null,
                         ),
                       ),
                     ],
@@ -184,7 +184,7 @@ class _AdminScreenState extends State<AdminScreen> {
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
-                      child: const Text('EKLE', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      child: const Text('Gosh', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     ),
                   ),
                 ],
@@ -196,7 +196,7 @@ class _AdminScreenState extends State<AdminScreen> {
             const SizedBox(height: 16),
             
             Text(
-              'Mevcut Lokasyonlar (${AshgabatData.locations.length})',
+              'Shu wagty bar lokasiyalar (${AshgabatData.locations.length})',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -221,7 +221,7 @@ class _AdminScreenState extends State<AdminScreen> {
       case LocationCategory.trafficLight: return '🚦 Swetafor';
       case LocationCategory.tunnel: return '🚇 Tunel';
       case LocationCategory.roundabout: return '🔄 Krug';
-      case LocationCategory.underpass: return '🌉 Päddemka';
+      case LocationCategory.underpass: return '🌉 Paddemka';
     }
   }
 }
