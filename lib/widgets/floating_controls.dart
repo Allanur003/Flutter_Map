@@ -20,17 +20,6 @@ class FloatingControls extends StatelessWidget {
       right: 16,
       child: Column(
         children: [
-          // My Location / Center button
-          _FabButton(
-            icon: Icons.my_location,
-            onTap: () {
-              mapController.move(_ashgabatCenter, 13.0);
-            },
-            isDark: isDark,
-            color: const Color(0xFF1A5F7A),
-            isMain: true,
-          ),
-          const SizedBox(height: 8),
           // Zoom in
           _FabButton(
             icon: Icons.add,
