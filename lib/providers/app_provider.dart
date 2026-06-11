@@ -100,3 +100,7 @@ class AppProvider extends ChangeNotifier {
         .toList();
   }
 }
+
+void refresh() {
+  notifyListeners();
+}
