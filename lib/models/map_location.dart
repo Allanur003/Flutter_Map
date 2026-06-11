@@ -1,7 +1,7 @@
-import 'dart:convert';  
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:shared_preferences/shared_preferences.dart'; 
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum LocationCategory {
   trafficLight,
@@ -90,7 +90,6 @@ class MapLocation {
 
 class AshgabatData {
   static final List<MapLocation> _defaultLocations = [
-    // ---- TRAFFIC LIGHTS ----
     MapLocation(
       id: 'tl_01',
       position: LatLng(37.9601, 58.3261),
@@ -133,8 +132,6 @@ class AshgabatData {
       category: LocationCategory.trafficLight,
       names: {'tk': 'Aeroport', 'ru': 'Аэропорт', 'en': 'Airport'},
     ),
-
-    // ---- TUNNELS ----
     MapLocation(
       id: 'tn_01',
       position: LatLng(37.9580, 58.3520),
@@ -165,8 +162,6 @@ class AshgabatData {
       category: LocationCategory.tunnel,
       names: {'tk': 'Merkezi', 'ru': 'Центральный', 'en': 'Central'},
     ),
-
-    // ---- ROUNDABOUTS ----
     MapLocation(
       id: 'rb_01',
       position: LatLng(37.9540, 58.3680),
@@ -203,8 +198,6 @@ class AshgabatData {
       category: LocationCategory.roundabout,
       names: {'tk': 'Demirgazyk', 'ru': 'Северный', 'en': 'Northern'},
     ),
-
-    // ---- UNDERPASSES ----
     MapLocation(
       id: 'up_01',
       position: LatLng(37.9565, 58.3615),
@@ -243,7 +236,6 @@ class AshgabatData {
     ),
   ];
 
-
   static List<MapLocation> locations = [];
 
   static Future<void> save() async {
@@ -252,17 +244,14 @@ class AshgabatData {
     await prefs.setString('locations', jsonEncode(jsonList));
   }
 
-
   static Future<void> load() async {
     final prefs = await SharedPreferences.getInstance();
     final jsonString = prefs.getString('locations');
 
     if (jsonString == null || jsonString.isEmpty) {
-    
       locations = List.from(_defaultLocations);
-      await save();  
+      await save();
     } else {
-   
       final jsonList = jsonDecode(jsonString) as List;
       locations = jsonList
           .map((json) => MapLocation.fromJson(json as Map<String, dynamic>))
