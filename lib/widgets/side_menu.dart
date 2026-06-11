@@ -180,7 +180,7 @@ class _Divider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 1,
-      color: isDark ? Colors.white10 : Colors.black08,
+      color: isDark ? Colors.white10 : Colors.black.withOpacity(0.08),
     );
   }
 }
