@@ -23,7 +23,6 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   late AnimationController _menuAnimController;
   late Animation<double> _menuAnimation;
 
-  // Center of Ashgabat
   static const LatLng _ashgabatCenter = LatLng(37.9601, 58.3261);
 
   @override
@@ -75,7 +74,6 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     return Scaffold(
       body: Stack(
         children: [
-          // ─── MAP ───────────────────────────────────────────────
           FlutterMap(
             mapController: _mapController,
             options: MapOptions(
@@ -88,39 +86,34 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                 if (provider.isMenuOpen) _closeMenu(provider);
               },
             ),
-children: [
-  // Tile layer - CartoDB (gündüz/gece) / ArcGIS (uydu)
-  TileLayer(
-    urlTemplate: provider.isSatelliteMode
-        ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-        : isDark
-            ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
-            : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-    subdomains: const ['a', 'b', 'c', 'd'],
-    maxZoom: 19,
-    userAgentPackageName: 'com.example.ashgabat_map',
-  ),
-
-  // Markers
-  MarkerLayer(
-    markers: provider.filteredLocations.map((location) {
-      final isSelected = _selectedLocation?.id == location.id;
-      return Marker(
-        point: location.position,
-        width: isSelected ? 52 : 40,
-        height: isSelected ? 52 : 40,
-        child: MapMarkerWidget(
-          location: location,
-          isSelected: isSelected,
-          onTap: () => _onMarkerTapped(location),
-        ),
-      );
-    }).toList(),
-  ),
-],
+            children: [
+              TileLayer(
+                urlTemplate: provider.isSatelliteMode
+                    ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+                    : isDark
+                        ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
+                        : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+                subdomains: const ['a', 'b', 'c', 'd'],
+                maxZoom: 19,
+                userAgentPackageName: 'com.example.ashgabat_map',
+              ),
+              MarkerLayer(
+                markers: provider.filteredLocations.map((location) {
+                  final isSelected = _selectedLocation?.id == location.id;
+                  return Marker(
+                    point: location.position,
+                    width: isSelected ? 52 : 40,
+                    height: isSelected ? 52 : 40,
+                    child: MapMarkerWidget(
+                      location: location,
+                      isSelected: isSelected,
+                      onTap: () => _onMarkerTapped(location),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
           ),
-
-          // ─── OVERLAY TINT when menu open ─────────────────────
           if (provider.isMenuOpen)
             GestureDetector(
               onTap: () => _closeMenu(provider),
@@ -131,8 +124,6 @@ children: [
                 ),
               ),
             ),
-
-          // ─── SIDE MENU ───────────────────────────────────────
           AnimatedBuilder(
             animation: _menuAnimation,
             builder: (context, child) {
@@ -146,8 +137,6 @@ children: [
               onClose: () => _closeMenu(provider),
             ),
           ),
-
-          // ─── TOP BAR ─────────────────────────────────────────
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -166,11 +155,7 @@ children: [
               ),
             ),
           ),
-
-          // ─── FLOATING CONTROLS (bottom right) ───────────────
           FloatingControls(mapController: _mapController),
-
-          // ─── LOCATION INFO CARD ──────────────────────────────
           if (_selectedLocation != null)
             Positioned(
               bottom: 90,
@@ -182,8 +167,6 @@ children: [
                 onDismiss: () => setState(() => _selectedLocation = null),
               ),
             ),
-
-          // ─── Empty state hint ────────────────────────────────
           if (provider.selectedCategories.isEmpty)
             Center(
               child: IgnorePointer(
