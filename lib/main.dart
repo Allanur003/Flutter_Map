@@ -38,7 +38,7 @@ class AshgabatMapApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AppProvider>(   
+    return Consumer<<AppProvider>(
       builder: (context, provider, _) {
         return MaterialApp(
           title: 'Aşgabat Map',
