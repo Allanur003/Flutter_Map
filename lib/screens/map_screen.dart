@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:latlong2/latlong.dart' as latlong;
 import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
 import '../models/map_location.dart';
@@ -98,16 +97,18 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                 maxZoom: 19,
                 userAgentPackageName: 'com.example.ashgabat_map',
               ),
-              if (provider.currentPosition != null && _selectedLocation != null)
+              if (provider.routePoints.isNotEmpty)
                 PolylineLayer(
                   polylines: [
                     Polyline(
-                      points: [
-                        provider.currentPosition!,
-                        _selectedLocation!.position,
-                      ],
-                      color: const Color(0xFF1A5F7A),
+                      points: provider.routePoints,
+                      color: const Color(0xFF2d6a4f),
                       strokeWidth: 4,
+                    ),
+                    Polyline(
+                      points: provider.routePoints,
+                      color: const Color(0xFF52b788),
+                      strokeWidth: 2,
                     ),
                   ],
                 ),
@@ -231,16 +232,29 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                   children: [
                     Expanded(
                       child: provider.routeDistance != null
-                          ? Text(
-                              'Aralyk: ${provider.routeDistance!.toStringAsFixed(1)} km',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: isDark ? Colors.white : Colors.black87,
-                              ),
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Mesafe: ${(provider.routeDistance! / 1000).toStringAsFixed(1)} km',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: isDark ? Colors.white : Colors.black87,
+                                  ),
+                                ),
+                                if (provider.routeDuration != null)
+                                  Text(
+                                    'Süre: ${provider.routeDuration! ~/ 60} dk',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: isDark ? Colors.white60 : Colors.black54,
+                                    ),
+                                  ),
+                              ],
                             )
                           : Text(
-                              'Yol çyzmak ucin basyn',
+                              'Yol çizmek için butona basın',
                               style: TextStyle(
                                 fontSize: 14,
                                 color: isDark ? Colors.white60 : Colors.black54,
@@ -250,14 +264,15 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                     const SizedBox(width: 8),
                     GestureDetector(
                       onTap: () async {
-                        await provider.getCurrentLocation();
-                        if (provider.currentPosition != null && _selectedLocation != null) {
-                          final distance = latlong.Distance().as(
-                            latlong.LengthUnit.Kilometer,
-                            provider.currentPosition!,
-                            _selectedLocation!.position,
+                        await provider.drawRouteToLocation(_selectedLocation!);
+                        if (provider.routePoints.isNotEmpty) {
+                          final bounds = LatLngBounds.fromPoints(provider.routePoints);
+                          _mapController.fitCamera(
+                            CameraFit.bounds(
+                              bounds: bounds,
+                              padding: const EdgeInsets.all(60),
+                            ),
                           );
-                          provider.setRouteDistance(distance);
                         }
                       },
                       child: Container(
@@ -271,7 +286,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                             Icon(Icons.route, color: Colors.white, size: 18),
                             SizedBox(width: 6),
                             Text(
-                              'Yol Çyz',
+                              'Yol Çiz',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
