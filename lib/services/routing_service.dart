@@ -5,24 +5,6 @@ import 'package:latlong2/latlong.dart';
 class RoutingService {
   static const String _baseUrl = 'https://router.project-osrm.org/route/v1/driving';
 
-  static Future<List<LatLng>> getRoute(LatLng start, LatLng end) async {
-    final url = '$_baseUrl/${start.longitude},${start.latitude};${end.longitude},${end.latitude}?overview=full&geometries=geojson';
-
-    try {
-      final response = await http.get(Uri.parse(url));
-      if (response.statusCode != 200) return [start, end];
-
-      final data = jsonDecode(response.body);
-      final routes = data['routes'] as List<dynamic>?;
-      if (routes == null || routes.isEmpty) return [start, end];
-
-      final geometry = routes[0]['geometry']['coordinates'] as List<dynamic>;
-      return geometry.map((coord) => LatLng(coord[1] as double, coord[0] as double)).toList();
-    } catch (e) {
-      return [start, end];
-    }
-  }
-
   static Future<Map<String, dynamic>> getRouteWithDetails(LatLng start, LatLng end) async {
     final url = '$_baseUrl/${start.longitude},${start.latitude};${end.longitude},${end.latitude}?overview=full&geometries=geojson';
 
