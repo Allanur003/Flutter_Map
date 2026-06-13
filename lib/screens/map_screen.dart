@@ -232,17 +232,14 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                   children: [
                     Expanded(
                       child: provider.routeDistance != null
-                          ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Aralyk: ${(provider.routeDistance! / 1000).toStringAsFixed(1)} km',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: isDark ? Colors.white : Colors.black87,
-                                  ),
-                                )
+                          ? Text(
+                              'Aralyk: ${(provider.routeDistance! / 1000).toStringAsFixed(1)} km',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: isDark ? Colors.white : Colors.black87,
+                              ),
+                            )
                           : Text(
                               '',
                               style: TextStyle(
