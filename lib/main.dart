@@ -6,10 +6,20 @@ import 'providers/app_provider.dart';
 import 'screens/map_screen.dart';
 import 'l10n/app_localizations.dart';
 import 'models/map_location.dart';
+import 'services/overpass_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AshgabatData.load();
+  
+  if (AshgabatData.locations.isEmpty) {
+    final overpassData = await OverpassService.fetchAll();
+    if (overpassData.isNotEmpty) {
+      AshgabatData.locations = overpassData;
+      await AshgabatData.save();
+    }
+  }
+  
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.landscapeLeft,
@@ -28,7 +38,7 @@ class AshgabatMapApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AppProvider>(
+    return Consumer<<AppProvider>(
       builder: (context, provider, _) {
         return MaterialApp(
           title: 'Aşgabat Map',
