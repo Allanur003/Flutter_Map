@@ -80,7 +80,7 @@ class SideMenu extends StatelessWidget {
                             final provider = context.read<AppProvider>();
                             await provider.loadFromOverpass();
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Veriler güncellendi!')),
+                              const SnackBar(content: Text('Datalar tazelendi!')),
                             );
                           },
                           child: Container(
@@ -102,7 +102,7 @@ class SideMenu extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 12),
                                 const Text(
-                                  'Verileri Güncelle (OSM)',
+                                  'Datalary tazele',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w600,
