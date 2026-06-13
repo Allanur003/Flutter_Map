@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:location/location.dart' as loc;
 import 'package:latlong2/latlong.dart';
 import '../models/map_location.dart';
+import '../services/overpass_service.dart';
 
 class AppProvider extends ChangeNotifier {
   bool _isDarkMode = false;
@@ -90,6 +91,15 @@ class AppProvider extends ChangeNotifier {
       'categories',
       _selectedCategories.map((e) => e.name).toList(),
     );
+  }
+
+    Future<void> loadFromOverpass() async {
+    final overpassData = await OverpassService.fetchAll();
+    if (overpassData.isNotEmpty) {
+      AshgabatData.locations = overpassData;
+      await AshgabatData.save();
+      notifyListeners();
+    }
   }
 
   void toggleMenu() {
