@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/map_location.dart';
+import 'package:geolocator/geolocator.dart';
 
 class AppProvider extends ChangeNotifier {
   bool _isDarkMode = false;
   String _languageCode = 'tk';
   bool _isSatelliteMode = false;
-  Set<LocationCategory> _selectedCategories = {};
+  Set<<LocationCategory> _selectedCategories = {};
   bool _isMenuOpen = false;
+  LatLng? _currentPosition;
+  double? _routeDistance;
 
   bool get isDarkMode => _isDarkMode;
   String get languageCode => _languageCode;
   bool get isSatelliteMode => _isSatelliteMode;
-  Set<LocationCategory> get selectedCategories => _selectedCategories;
+  Set<<LocationCategory> get selectedCategories => _selectedCategories;
   bool get isAllSelected => _selectedCategories.length == LocationCategory.values.length;
   bool get isMenuOpen => _isMenuOpen;
+  LatLng? get currentPosition => _currentPosition;
+  double? get routeDistance => _routeDistance;
 
   AppProvider() {
     _loadPrefs();
@@ -93,6 +98,29 @@ class AppProvider extends ChangeNotifier {
 
   void closeMenu() {
     _isMenuOpen = false;
+    notifyListeners();
+  }
+
+  Future<void> getCurrentLocation() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) return;
+    }
+    if (permission == LocationPermission.deniedForever) return;
+
+    final position = await Geolocator.getCurrentPosition();
+    _currentPosition = LatLng(position.latitude, position.longitude);
+    notifyListeners();
+  }
+
+  void setRouteDistance(double distance) {
+    _routeDistance = distance;
+    notifyListeners();
+  }
+
+  void clearRoute() {
+    _routeDistance = null;
     notifyListeners();
   }
 
