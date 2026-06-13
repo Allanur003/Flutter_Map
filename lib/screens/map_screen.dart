@@ -244,13 +244,13 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                   ),
                                 ),
                                 if (provider.routeDuration != null)
-                                  Text(
-                                    'Süre: ${provider.routeDuration! ~/ 60} dk',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: isDark ? Colors.white60 : Colors.black54,
-                                    ),
-                                  ),
+                                  // Text(
+                                  //   'Wagt: ${provider.routeDuration! ~/ 60} mnt',
+                                  //   style: TextStyle(
+                                  //     fontSize: 12,
+                                  //     color: isDark ? Colors.white60 : Colors.black54,
+                                  //   ),
+                                  // ),
                               ],
                             )
                           : Text(
