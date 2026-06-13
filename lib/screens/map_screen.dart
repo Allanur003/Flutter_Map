@@ -155,4 +155,255 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
           ),
           if (provider.isMenuOpen)
             GestureDetector(
-              onTap: () => _closeMenu(provider
+              onTap: () => _closeMenu(provider),
+              child: AnimatedBuilder(
+                animation: _menuAnimation,
+                builder: (context, _) => Container(
+                  color: Colors.black.withOpacity(0.4 * _menuAnimation.value),
+                ),
+              ),
+            ),
+          AnimatedBuilder(
+            animation: _menuAnimation,
+            builder: (context, child) {
+              final offset = (1.0 - _menuAnimation.value) * -(size.width * 0.78);
+              return Transform.translate(
+                offset: Offset(offset, 0),
+                child: child,
+              );
+            },
+            child: SideMenu(
+              onClose: () => _closeMenu(provider),
+            ),
+          ),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              child: Row(
+                children: [
+                  _MenuButton(
+                    onTap: () => _toggleMenu(provider),
+                    isOpen: provider.isMenuOpen,
+                    isDark: isDark,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _TitleCard(title: loc.appTitle, isDark: isDark),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          FloatingControls(mapController: _mapController),
+          if (_selectedLocation != null)
+            Positioned(
+              bottom: 90,
+              left: 16,
+              right: 16,
+              child: LocationInfoCard(
+                location: _selectedLocation!,
+                langCode: provider.languageCode,
+                onDismiss: () => setState(() {
+                  _selectedLocation = null;
+                  provider.clearRoute();
+                }),
+              ),
+            ),
+          if (_selectedLocation != null)
+            Positioned(
+              bottom: 160,
+              left: 16,
+              right: 16,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  color: isDark ? const Color(0xFF1E1E2E) : Colors.white,
+                  borderRadius: BorderRadius.circular(14),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.15),
+                      blurRadius: 10,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: provider.routeDistance != null
+                          ? Text(
+                              'Mesafe: ${provider.routeDistance!.toStringAsFixed(1)} km',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: isDark ? Colors.white : Colors.black87,
+                              ),
+                            )
+                          : Text(
+                              'Yol çizmek için butona basın',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: isDark ? Colors.white60 : Colors.black54,
+                              ),
+                            ),
+                    ),
+                    const SizedBox(width: 8),
+                    GestureDetector(
+                      onTap: () async {
+                        await provider.getCurrentLocation();
+                        if (provider.currentPosition != null && _selectedLocation != null) {
+                          final distance = latlong.Distance().as(
+                            latlong.LengthUnit.Kilometer,
+                            provider.currentPosition!,
+                            _selectedLocation!.position,
+                          );
+                          provider.setRouteDistance(distance);
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1A5F7A),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Row(
+                          children: [
+                            Icon(Icons.route, color: Colors.white, size: 18),
+                            SizedBox(width: 6),
+                            Text(
+                              'Yol Çiz',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          if (provider.selectedCategories.isEmpty)
+            Center(
+              child: IgnorePointer(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: (isDark ? Colors.black : Colors.white).withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: Colors.grey.withOpacity(0.3),
+                    ),
+                  ),
+                  child: Text(
+                    loc.noMarkersSelected,
+                    style: TextStyle(
+                      color: isDark ? Colors.white70 : Colors.black54,
+                      fontSize: 14,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MenuButton extends StatelessWidget {
+  final VoidCallback onTap;
+  final bool isOpen;
+  final bool isDark;
+
+  const _MenuButton({
+    required this.onTap,
+    required this.isOpen,
+    required this.isDark,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        width: 48,
+        height: 48,
+        decoration: BoxDecoration(
+          color: isOpen
+              ? const Color(0xFF1A5F7A)
+              : (isDark ? const Color(0xFF1E1E2E) : Colors.white),
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.18),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Icon(
+          isOpen ? Icons.close : Icons.menu,
+          color: isOpen
+              ? Colors.white
+              : (isDark ? Colors.white : const Color(0xFF1A5F7A)),
+          size: 22,
+        ),
+      ),
+    );
+  }
+}
+
+class _TitleCard extends StatelessWidget {
+  final String title;
+  final bool isDark;
+
+  const _TitleCard({required this.title, required this.isDark});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 48,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E1E2E) : Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.15),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 8,
+            height: 8,
+            decoration: const BoxDecoration(
+              color: Color(0xFF1A5F7A),
+              shape: BoxShape.circle,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            title,
+            style: TextStyle(
+              color: isDark ? Colors.white : const Color(0xFF1A5F7A),
+              fontWeight: FontWeight.w700,
+              fontSize: 15,
+              letterSpacing: 0.3,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
