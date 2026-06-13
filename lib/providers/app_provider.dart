@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/map_location.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart' as loc;
 
 class AppProvider extends ChangeNotifier {
   bool _isDarkMode = false;
@@ -102,15 +103,22 @@ class AppProvider extends ChangeNotifier {
   }
 
   Future<void> getCurrentLocation() async {
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) return;
+    final location = loc.Location();
+    
+    bool serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) return;
     }
-    if (permission == LocationPermission.deniedForever) return;
 
-    final position = await Geolocator.getCurrentPosition();
-    _currentPosition = LatLng(position.latitude, position.longitude);
+    loc.PermissionStatus permission = await location.hasPermission();
+    if (permission == loc.PermissionStatus.denied) {
+      permission = await location.requestPermission();
+      if (permission != loc.PermissionStatus.granted) return;
+    }
+
+    final locationData = await location.getLocation();
+    _currentPosition = LatLng(locationData.latitude!, locationData.longitude!);
     notifyListeners();
   }
 
