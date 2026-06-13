@@ -19,6 +19,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.19.0
+    geolocator: ^11.0.0
+  flutter_map_polyline: ^1.0.0
 
 dev_dependencies:
   flutter_test:
