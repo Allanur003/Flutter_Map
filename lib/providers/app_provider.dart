@@ -4,6 +4,7 @@ import 'package:location/location.dart' as loc;
 import 'package:latlong2/latlong.dart';
 import '../models/map_location.dart';
 import '../services/routing_service.dart';
+import '../services/overpass_service.dart';
 
 class AppProvider extends ChangeNotifier {
   bool _isDarkMode = false;
