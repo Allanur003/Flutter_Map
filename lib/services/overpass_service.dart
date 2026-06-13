@@ -1,78 +1,113 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'providers/app_provider.dart';
-import 'screens/map_screen.dart';
-import 'l10n/app_localizations.dart';
-import 'models/map_location.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:latlong2/latlong.dart';
+import '../models/map_location.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await AshgabatData.load();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
-  ]);
-  runApp(
-    ChangeNotifierProvider(
-      create: (_) => AppProvider(),
-      child: const AshgabatMapApp(),
-    ),
-  );
-}
+class OverpassService {
+  static const String _overpassUrl = 'https://overpass-api.de/api/interpreter';
 
-class AshgabatMapApp extends StatelessWidget {
-  const AshgabatMapApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<AppProvider>(
-      builder: (context, provider, _) {
-        return MaterialApp(
-          title: 'Aşgabat Map',
-          debugShowCheckedModeBanner: false,
-          theme: AppThemes.lightTheme,
-          darkTheme: AppThemes.darkTheme,
-          themeMode: provider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-          locale: Locale(provider.languageCode),
-          supportedLocales: const [
-            Locale('tk'),
-            Locale('ru'),
-            Locale('en'),
-          ],
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          home: const MapScreen(),
-        );
-      },
-    );
+  static Future<List<MapLocation>> fetchTrafficLights() async {
+    return _fetchByQuery('''
+      [out:json][timeout:25];
+      area["name"="Ashgabat"]->.searchArea;
+      (
+        node["highway"="traffic_signals"](area.searchArea);
+      );
+      out body;
+    ''', LocationCategory.trafficLight);
   }
-}
 
-class AppThemes {
-  static ThemeData get lightTheme => ThemeData(
-        brightness: Brightness.light,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF1A5F7A),
-          brightness: Brightness.light,
-        ),
-        useMaterial3: true,
-        fontFamily: 'Roboto',
+  static Future<List<MapLocation>> fetchTunnels() async {
+    return _fetchByQuery('''
+      [out:json][timeout:25];
+      area["name"="Ashgabat"]->.searchArea;
+      (
+        way["tunnel"="yes"](area.searchArea);
+        node["tunnel"="yes"](area.searchArea);
       );
+      out body center;
+    ''', LocationCategory.tunnel);
+  }
 
-  static ThemeData get darkTheme => ThemeData(
-        brightness: Brightness.dark,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF1A5F7A),
-          brightness: Brightness.dark,
-        ),
-        useMaterial3: true,
-        fontFamily: 'Roboto',
+  static Future<List<MapLocation>> fetchRoundabouts() async {
+    return _fetchByQuery('''
+      [out:json][timeout:25];
+      area["name"="Ashgabat"]->.searchArea;
+      (
+        way["junction"="roundabout"](area.searchArea);
+        node["junction"="roundabout"](area.searchArea);
       );
+      out body center;
+    ''', LocationCategory.roundabout);
+  }
+
+  static Future<List<MapLocation>> fetchUnderpasses() async {
+    return _fetchByQuery('''
+      [out:json][timeout:25];
+      area["name"="Ashgabat"]->.searchArea;
+      (
+        way["highway"="footway"]["tunnel"="yes"](area.searchArea);
+        way["highway"="steps"]["tunnel"="yes"](area.searchArea);
+        node["highway"="footway"]["tunnel"="yes"](area.searchArea);
+      );
+      out body center;
+    ''', LocationCategory.underpass);
+  }
+
+  static Future<List<MapLocation>> _fetchByQuery(String query, LocationCategory category) async {
+    final response = await http.post(
+      Uri.parse(_overpassUrl),
+      body: {'data': query},
+    );
+
+    if (response.statusCode != 200) return [];
+
+    final data = jsonDecode(response.body);
+    final elements = data['elements'] as List<dynamic>? ?? [];
+
+    final results = <MapLocation>[];
+    var index = 0;
+
+    for (final element in elements) {
+      final lat = element['lat'] as double?;
+      final lon = element['lon'] as double?;
+      final center = element['center'] as Map<String, dynamic>?;
+      
+      final finalLat = lat ?? center?['lat'] as double?;
+      final finalLon = lon ?? center?['lon'] as double?;
+
+      if (finalLat == null || finalLon == null) continue;
+
+      final tags = element['tags'] as Map<String, dynamic>? ?? {};
+      final name = tags['name'] as String? ?? 'Bilinmeyan';
+
+      results.add(MapLocation(
+        id: '${category.name}_$index',
+        position: LatLng(finalLat, finalLon),
+        category: category,
+        names: {
+          'tk': name,
+          'ru': name,
+          'en': name,
+        },
+      ));
+      index++;
+    }
+
+    return results;
+  }
+
+  static Future<List<MapLocation>> fetchAll() async {
+    final trafficLights = await fetchTrafficLights();
+    final tunnels = await fetchTunnels();
+    final roundabouts = await fetchRoundabouts();
+    final underpasses = await fetchUnderpasses();
+
+    return [
+      ...trafficLights,
+      ...tunnels,
+      ...roundabouts,
+      ...underpasses,
+    ];
+  }
 }
