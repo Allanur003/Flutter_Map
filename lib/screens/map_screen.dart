@@ -242,17 +242,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                     fontWeight: FontWeight.w600,
                                     color: isDark ? Colors.white : Colors.black87,
                                   ),
-                                ),
-                                if (provider.routeDuration != null)
-                                  Text(
-                                    'Wagt: ${provider.routeDuration! ~/ 60} mnt',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: isDark ? Colors.white60 : Colors.black54,
-                                    ),
-                                  ),
-                              ],
-                            )
+                                )
                           : Text(
                               '',
                               style: TextStyle(
