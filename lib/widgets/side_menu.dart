@@ -12,7 +12,7 @@ class SideMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<<AppProvider>();
+    final provider = context.watch<AppProvider>();
     final loc = AppLocalizations.of(context);
     final isDark = provider.isDarkMode;
     final size = MediaQuery.of(context).size;
@@ -77,7 +77,7 @@ class SideMenu extends StatelessWidget {
                         GestureDetector(
                           onTap: () async {
                             onClose();
-                            final provider = context.read<<AppProvider>();
+                            final provider = context.read<AppProvider>();
                             await provider.loadFromOverpass();
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Veriler güncellendi!')),
