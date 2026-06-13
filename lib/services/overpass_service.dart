@@ -55,46 +55,50 @@ class OverpassService {
   }
 
   static Future<List<MapLocation>> _fetchByQuery(String query, LocationCategory category) async {
-    final response = await http.post(
-      Uri.parse(_overpassUrl),
-      body: {'data': query},
-    );
+    try {
+      final response = await http.post(
+        Uri.parse(_overpassUrl),
+        body: {'data': query},
+      );
 
-    if (response.statusCode != 200) return [];
+      if (response.statusCode != 200) return [];
 
-    final data = jsonDecode(response.body);
-    final elements = data['elements'] as List<dynamic>? ?? [];
+      final data = jsonDecode(response.body);
+      final elements = data['elements'] as List<<dynamic>? ?? [];
 
-    final results = <MapLocation>[];
-    var index = 0;
+      final results = <MapLocation>[];
+      var index = 0;
 
-    for (final element in elements) {
-      final lat = element['lat'] as double?;
-      final lon = element['lon'] as double?;
-      final center = element['center'] as Map<String, dynamic>?;
-      
-      final finalLat = lat ?? center?['lat'] as double?;
-      final finalLon = lon ?? center?['lon'] as double?;
+      for (final element in elements) {
+        final lat = element['lat'] as double?;
+        final lon = element['lon'] as double?;
+        final center = element['center'] as Map<String, dynamic>?;
+        
+        final finalLat = lat ?? center?['lat'] as double?;
+        final finalLon = lon ?? center?['lon'] as double?;
 
-      if (finalLat == null || finalLon == null) continue;
+        if (finalLat == null || finalLon == null) continue;
 
-      final tags = element['tags'] as Map<String, dynamic>? ?? {};
-      final name = tags['name'] as String? ?? 'Bilinmeyan';
+        final tags = element['tags'] as Map<String, dynamic>? ?? {};
+        final name = tags['name'] as String? ?? 'Bilinmeyan';
 
-      results.add(MapLocation(
-        id: '${category.name}_$index',
-        position: LatLng(finalLat, finalLon),
-        category: category,
-        names: {
-          'tk': name,
-          'ru': name,
-          'en': name,
-        },
-      ));
-      index++;
+        results.add(MapLocation(
+          id: '${category.name}_$index',
+          position: LatLng(finalLat, finalLon),
+          category: category,
+          names: {
+            'tk': name,
+            'ru': name,
+            'en': name,
+          },
+        ));
+        index++;
+      }
+
+      return results;
+    } catch (e) {
+      return [];
     }
-
-    return results;
   }
 
   static Future<List<MapLocation>> fetchAll() async {
