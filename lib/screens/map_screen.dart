@@ -9,6 +9,7 @@ import '../widgets/side_menu.dart';
 import '../widgets/map_marker_widget.dart';
 import '../widgets/location_info_card.dart';
 import '../widgets/floating_controls.dart';
+import 'package:latlong2/latlong.dart' as latlong;
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -86,33 +87,74 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                 if (provider.isMenuOpen) _closeMenu(provider);
               },
             ),
-            children: [
-              TileLayer(
-                urlTemplate: provider.isSatelliteMode
-                    ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-                    : isDark
-                        ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
-                        : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-                subdomains: const ['a', 'b', 'c', 'd'],
-                maxZoom: 19,
-                userAgentPackageName: 'com.example.ashgabat_map',
-              ),
-              MarkerLayer(
-                markers: provider.filteredLocations.map((location) {
-                  final isSelected = _selectedLocation?.id == location.id;
-                  return Marker(
-                    point: location.position,
-                    width: isSelected ? 52 : 40,
-                    height: isSelected ? 52 : 40,
-                    child: MapMarkerWidget(
-                      location: location,
-                      isSelected: isSelected,
-                      onTap: () => _onMarkerTapped(location),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ],
+children: [
+  TileLayer(
+    urlTemplate: provider.isSatelliteMode
+        ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+        : isDark
+            ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
+            : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+    subdomains: const ['a', 'b', 'c', 'd'],
+    maxZoom: 19,
+    userAgentPackageName: 'com.example.ashgabat_map',
+  ),
+  
+  if (provider.currentPosition != null && _selectedLocation != null)
+    PolylineLayer(
+      polylines: [
+        Polyline(
+          points: [
+            provider.currentPosition!,
+            _selectedLocation!.position,
+          ],
+          color: const Color(0xFF1A5F7A),
+          strokeWidth: 4,
+        ),
+      ],
+    ),
+  
+  if (provider.currentPosition != null)
+    MarkerLayer(
+      markers: [
+        Marker(
+          point: provider.currentPosition!,
+          width: 40,
+          height: 40,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.blue,
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white, width: 3),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.blue.withOpacity(0.4),
+                  blurRadius: 10,
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
+            child: const Icon(Icons.my_location, color: Colors.white, size: 20),
+          ),
+        ),
+      ],
+    ),
+  
+  MarkerLayer(
+    markers: provider.filteredLocations.map((location) {
+      final isSelected = _selectedLocation?.id == location.id;
+      return Marker(
+        point: location.position,
+        width: isSelected ? 52 : 40,
+        height: isSelected ? 52 : 40,
+        child: MapMarkerWidget(
+          location: location,
+          isSelected: isSelected,
+          onTap: () => _onMarkerTapped(location),
+        ),
+      );
+    }).toList(),
+  ),
+],
           ),
           if (provider.isMenuOpen)
             GestureDetector(
