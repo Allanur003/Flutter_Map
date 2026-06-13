@@ -236,7 +236,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Mesafe: ${(provider.routeDistance! / 1000).toStringAsFixed(1)} km',
+                                  'Aralyk: ${(provider.routeDistance! / 1000).toStringAsFixed(1)} km',
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
@@ -254,7 +254,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                               ],
                             )
                           : Text(
-                              'Yol çizmek için butona basın',
+                              '',
                               style: TextStyle(
                                 fontSize: 14,
                                 color: isDark ? Colors.white60 : Colors.black54,
@@ -286,7 +286,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                             Icon(Icons.route, color: Colors.white, size: 18),
                             SizedBox(width: 6),
                             Text(
-                              'Yol Çiz',
+                              'Yoly Çyz',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
