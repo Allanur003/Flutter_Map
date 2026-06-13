@@ -64,7 +64,7 @@ class OverpassService {
       if (response.statusCode != 200) return [];
 
       final data = jsonDecode(response.body);
-      final elements = data['elements'] as List<<dynamic>? ?? [];
+      final elements = data['elements'] as List<dynamic>? ?? [];
 
       final results = <MapLocation>[];
       var index = 0;
