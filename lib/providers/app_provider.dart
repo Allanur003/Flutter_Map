@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/map_location.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart' as loc;
+import 'package:latlong2/latlong.dart';
+import '../models/map_location.dart';
 
 class AppProvider extends ChangeNotifier {
   bool _isDarkMode = false;
   String _languageCode = 'tk';
   bool _isSatelliteMode = false;
-  Set<<LocationCategory> _selectedCategories = {};
+  Set<LocationCategory> _selectedCategories = {};
   bool _isMenuOpen = false;
   LatLng? _currentPosition;
   double? _routeDistance;
@@ -16,7 +16,7 @@ class AppProvider extends ChangeNotifier {
   bool get isDarkMode => _isDarkMode;
   String get languageCode => _languageCode;
   bool get isSatelliteMode => _isSatelliteMode;
-  Set<<LocationCategory> get selectedCategories => _selectedCategories;
+  Set<LocationCategory> get selectedCategories => _selectedCategories;
   bool get isAllSelected => _selectedCategories.length == LocationCategory.values.length;
   bool get isMenuOpen => _isMenuOpen;
   LatLng? get currentPosition => _currentPosition;
