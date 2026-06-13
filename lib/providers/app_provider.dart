@@ -89,6 +89,15 @@ class AppProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+    Future<void> loadFromOverpass() async {
+    final overpassData = await OverpassService.fetchAll();
+    if (overpassData.isNotEmpty) {
+      AshgabatData.locations = overpassData;
+      await AshgabatData.save();
+      notifyListeners();
+    }
+  }
+
   Future<void> _saveCategories() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setStringList(
