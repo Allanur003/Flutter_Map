@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:location/location.dart' as loc;
 import 'package:latlong2/latlong.dart';
 import '../models/map_location.dart';
-import '../services/overpass_service.dart';
+import '../services/routing_service.dart';
 
 class AppProvider extends ChangeNotifier {
   bool _isDarkMode = false;
@@ -12,7 +12,9 @@ class AppProvider extends ChangeNotifier {
   Set<LocationCategory> _selectedCategories = {};
   bool _isMenuOpen = false;
   LatLng? _currentPosition;
+  List<LatLng> _routePoints = [];
   double? _routeDistance;
+  int? _routeDuration;
 
   bool get isDarkMode => _isDarkMode;
   String get languageCode => _languageCode;
@@ -21,7 +23,9 @@ class AppProvider extends ChangeNotifier {
   bool get isAllSelected => _selectedCategories.length == LocationCategory.values.length;
   bool get isMenuOpen => _isMenuOpen;
   LatLng? get currentPosition => _currentPosition;
+  List<LatLng> get routePoints => _routePoints;
   double? get routeDistance => _routeDistance;
+  int? get routeDuration => _routeDuration;
 
   AppProvider() {
     _loadPrefs();
@@ -93,15 +97,6 @@ class AppProvider extends ChangeNotifier {
     );
   }
 
-    Future<void> loadFromOverpass() async {
-    final overpassData = await OverpassService.fetchAll();
-    if (overpassData.isNotEmpty) {
-      AshgabatData.locations = overpassData;
-      await AshgabatData.save();
-      notifyListeners();
-    }
-  }
-
   void toggleMenu() {
     _isMenuOpen = !_isMenuOpen;
     notifyListeners();
@@ -112,7 +107,7 @@ class AppProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getCurrentLocation() async {
+  Future<void> drawRouteToLocation(MapLocation destination) async {
     final location = loc.Location();
     
     bool serviceEnabled = await location.serviceEnabled();
@@ -129,16 +124,20 @@ class AppProvider extends ChangeNotifier {
 
     final locationData = await location.getLocation();
     _currentPosition = LatLng(locationData.latitude!, locationData.longitude!);
-    notifyListeners();
-  }
 
-  void setRouteDistance(double distance) {
-    _routeDistance = distance;
+    final result = await RoutingService.getRouteWithDetails(_currentPosition!, destination.position);
+    
+    _routePoints = result['points'] as List<LatLng>;
+    _routeDistance = result['distance'] as double;
+    _routeDuration = (result['duration'] as double).round();
+    
     notifyListeners();
   }
 
   void clearRoute() {
+    _routePoints = [];
     _routeDistance = null;
+    _routeDuration = null;
     notifyListeners();
   }
 
