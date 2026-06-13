@@ -75,48 +75,6 @@ class SideMenu extends StatelessWidget {
                         _Divider(isDark: isDark),
                         const SizedBox(height: 16),
                         GestureDetector(
-                          onTap: () async {
-                            onClose();
-                            final provider = context.read<AppProvider>();
-                            await provider.loadFromOverpass();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Datalar tazelendi!')),
-                            );
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF2ECC71),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 32,
-                                  height: 32,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: const Icon(Icons.download, color: Colors.white, size: 18),
-                                ),
-                                const SizedBox(width: 12),
-                                const Text(
-                                  'Datalary tazele',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                const Spacer(),
-                                const Icon(Icons.arrow_forward_ios, color: Colors.white70, size: 14),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        GestureDetector(
                           onTap: () {
                             onClose();
                             Navigator.push(
