@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
+import 'package:latlong2/latlong.dart' as latlong;
 import '../providers/app_provider.dart';
 import '../models/map_location.dart';
 import '../l10n/app_localizations.dart';
@@ -9,7 +10,6 @@ import '../widgets/side_menu.dart';
 import '../widgets/map_marker_widget.dart';
 import '../widgets/location_info_card.dart';
 import '../widgets/floating_controls.dart';
-import 'package:latlong2/latlong.dart' as latlong;
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
